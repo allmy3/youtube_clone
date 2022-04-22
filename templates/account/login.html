@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load account socialaccount %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>{% trans 'Логин' %}</title>
+</head>
+<body class="bg-gray-100  h-screen">
+        <div class="bg-white mt-8 w-1/2 h-1/2 mx-auto p-8">
+            <h2 class="text-2xl font-semibold text-center uppercase mb-2">{% trans 'Вход в аккаунт' %}</h2>
+            {% get_providers as socialaccount_providers %}
+            {% if socialaccount_providers %}
+<p>{% blocktrans with site.name as site_name %}Please sign in with one
+of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+  <div class="login-or">{% trans 'or' %}</div>
+
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>{% blocktrans %}Если вы еще не создали учетную запись, то сначала
+<a href="{{ signup_url }}">зарегистрируйтесь.</a>{% endblocktrans %}
+{% endif %}
+                <form class="login" method="POST" action="{% url 'account_login' %}"> {% csrf_token %}
+                    <div class="my-4">
+                       <input type="text" class="w-full px-2 py-3 border rounded outline-none focus:shadow-outline" name="login" id="id_login" placeholder="Логин...">
+                   </div>
+                   <div class="my-4">
+                   <input type="password" class="w-full px-2 py-3 border rounded outline-none focus:shadow-outline" name="password" id="id_password" placeholder="Пароль...">
+                   </div>
+
+                {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+
+                   <div class="my-3">
+                       <button class="border bg-blue-500 rounded w-full py-2 text-2xl font-bold text-white primaryAction" type="submit">{% trans 'Войти' %}</button>
+                   </div>
+
+                </form>
+
+                 <h2 class="text-center text-gray-600 text-3xl font-serif">{% trans 'Или войти с' %}</h2>
+
+                 <div class="my-3 flex">
+                     <a href="#" class="border rounded border-blue-500 w-1/2 py-2 text-center capitalize text-blue-500 font-semibold hover:bg-gray-200">
+                         {% trans 'ВКонтакте' %}</a>
+                     <a href="#" class="border rounded ml-2 border-red-500 w-1/2 py-2 text-center capitalize text-red-500 font-semibold hover:bg-gray-200">
+                    {% trans 'Яндекс' %}</a>
+    </div>
+                 <div class="my-3 text-center">
+                     <p class="text-base">{% trans 'Нет аккаунта?' %} <a href="/signup.html" class="text-blue-500">{% trans 'Зарегестрироваться сейчас' %}</a></p>
+                 </div>
+            </div>
+</body>
+</html>
+
+

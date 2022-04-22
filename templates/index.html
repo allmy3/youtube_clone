@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock title %}
+
+{% block content %}
+
+    <h3 style="margin-left: 2%; margin-top: 1%">Рекомендации</h3>
+
+<div style="margin-left: 2%; margin-top: 1%; margin-right: 1%">
+  {% for video in videos %}
+  <div class="card" style="width: 18rem; display: inline-block; margin-bottom: 10px">
+    <a href="{{video.get_absolute_url}}"><img src="{{video.thumbnail.url}}" class="card-img-top" width="200" height="200"></a>
+  <div class="card-body">
+    <h5 class="card-title">{{video.title|truncatechars:40}}</h5>
+  </div>
+    <div class="card-footer">
+      <small class="text-muted"><a style="text-decoration: none;" href="{{video.channel.get_absolute_url}}">{% if video.channel.avatar %}<img src="{{video.channel.avatar.url}}" height="35" width="35" style="border-radius: 10000px">{% endif %} {{video.channel.name}}</a> • {{video.created}} | views:
+        {{video.views}} | likes: {{video.likes}}</small>
+    </div>
+</div>
+  {% endfor %}
+</div>
+
+{% endblock content %}

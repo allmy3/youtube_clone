@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}{{channel.name}}{% endblock title %}
+
+{% block content %}
+
+    <div style="margin-left: 10%; margin-top:3%">
+        <!-- CHANNEL PHOTOS -->
+        {% if channel.avatar %}<img src="{{channel.avatar.url}}" class="baground" height="100" width="100" style="border-radius: 10000px">{% endif %}
+        {% if channel.phone_photo %}<img src="{{channel.phone_photo.url}}" class="baground">{% endif %}
+        <!-- END CHANNEL PHOTOS -->
+
+        {% if user.username != channel.user.username %}
+        {% if user.is_authenticated %}
+            {% if is_sub == True %}
+                <h4>{{channel.name}} <a href="{% url 'follow' channel.user.username 0 %}" style="color:  grey ; text-decoration: none;">SUBSCRIBED</a></h4>
+            {% else %}
+                <h4>{{channel.name}} <a href="{% url 'follow' channel.user.username 1 %}" style="color:  #ec5252 ; text-decoration: none;">SUBSCRIBE</a></h4>
+            {% endif %}
+        {% endif %}
+        {% else %}
+            <h4>{{channel.name}}</h4>
+            <h3><a href="{% url 'upd_data' %}" class="btn btn-primary">Изменить данные канала</a> <a href="{% url 'management' %}" class="btn btn-primary">Творческая студия</a></h3>
+        {% endif %}
+        <a href="{% url 'monologue' channel.slug %}" class="btn btn-primary">{% if user.username == channel.user.username %}Ваш монолог{% else %}Монолог пользователя{% endif %}</a>
+        <h6>Subscribers: {{subscribers_count}}</h6>
+
+        <!-- VIDEOS -->
+        {% for video in videos %}
+  <div class="card" style="width: 18rem; display:inline-block; margin-bottom: 10px">
+    <a href="{{video.get_absolute_url}}"><img src="{{video.thumbnail.url}}" class="card-img-top" width="200" height="200"></a>
+  <div class="card-body">
+    <h5 class="card-title">{{video.title}}</h5>
+  </div>
+    <div class="card-footer">
+      <small class="text-muted"><a style="text-decoration: none;" href="#">@{{video.channel.user.username}}</a> • {{video.created}}</small>
+    </div>
+</div>
+  {% endfor %}
+        <!-- END VIDEOS -->
+    </div>
+
+{% endblock content %}

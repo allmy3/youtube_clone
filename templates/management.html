@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Творческая студия{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-5">
+	<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Превью</th>
+      <th scope="col">Название</th>
+      <th scope="col">Просмотры</th>
+      <th scope="col">Лайки</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Функции</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for video in objects %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <th><a href="{{ video.get_absolute_url }}"><img src="{{video.thumbnail.url}}" height="50" width="50"></a></th>
+      <td>{{video.title}}</td>
+      <td>{{video.views}}</td>
+      <td>{{video.likes}}</td>
+      <td>{{video.created}}</td>
+      <td><a href="{% url 'update_video' video.pk %}" class="btn btn-primary">Редактировать</a> <a href="{% url 'delete_video' video.pk %}" class="btn btn-danger">Удалить</a></td>
+    </tr>
+    <tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% endblock content %}

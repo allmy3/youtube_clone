@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{video.title}}{% endblock title %}
+
+{% block content %}
+
+<div class="video-block" style="margin-left: 3%; margin-top: 2%; float:left">
+    <video name='demo' controls autoplay width='60%' height='50%'>
+        <source src="{{video.video_file.url}}" type="video/mp4">
+    </video>
+    <h4 style="margin-top: 5px">{{video.title}}</h4>
+    <h5><a href="{{video.channel.get_absolute_url}}" style="text-decoration: none; color: black"><img src="{{video.channel.avatar.url}}" height="51" width="51" style="border-radius: 10000px"> <span style="font-size: 25px">{{video.channel.name}}</span></a>
+        | <span>{{video.likes}} likes</span> |{% if user.is_authenticated %}<a href="{% url 'like' video.id %}" class="btn">{% if is_liked == False %}Like{% else %}Unlike{% endif %}</a>{% endif %}
+    <p style="max-width: 370px" class="video-description">
+        {{video.description}}
+    </p>
+    <div style="max-width: 1110px; width: 100%" class="comment-block">
+        {% if user.is_authenticated %}
+        <hr>
+        <h4>Leave comment</h4>
+        <form method="post">{% csrf_token %}
+            {{form.content}}
+            <input type="submit" value="Опубликовать" class="btn btn-primary">
+        </form>
+        {% endif %}
+        <hr>
+        <h4>Comments</h4>
+        {% for comment in video.comments.all %}
+        <div class="card-footer">
+      <small class="text-muted"><a style="text-decoration: none;" href="{{comment.user.user_channel.first.get_absolute_url}}">{% if video.channel.avatar %}<img src="{{comment.user.user_channel.first.avatar.url}}" height="35" width="35" style="border-radius: 10000px">{% endif %} {{comment.user.user_channel.first.name}}</a> • {{comment.content}} |</small>
+    </div>
+        {% endfor %}
+        <hr>
+        <div class="comment">
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

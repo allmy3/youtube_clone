@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Монолог канала {{channel.name}}{% endblock title %}
+
+{% block content %}
+
+{% if channel.user == request.user %}
+<div class="container mt-3" style="margin-bottom: 2%;">
+    <div style="background-color:     #f7f8f8   ; max-height: 10000px;">
+        <form method="post">{% csrf_token %}
+            {{form.text}}
+            <input type="submit" value="Опубликовать" class="btn btn-primary">
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% for monologue in monologues %}
+<div class="container mt-3" style="margin-bottom: 2%;">
+    <div style="background-color:     #f7f8f8   ; max-height: 10000px;">
+        <div class="channel__date" style="padding-left: 40%; padding-top: 1.5%">{{channel.name}} | {{monologue.created}}</div>
+        <div class="text" style="padding: 1.5%">{{monologue.text}}</div>
+        {% if monologue.channel.user == request.user %}
+            <div class="btns">
+                <a href="{% url 'update_m' monologue.pk %}" class="btn btn-primary">Изменить</a> <a href="{% url 'delete_m' monologue.pk %}" class="btn btn-danger">Удалить</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<div class="container mt-3">
+    <div style="background-color:    #e8eff0   ; max-height: 10000px; height: 60px">
+        <div class="channel__date" style="padding-left: 45%; padding-top: 1.5%">Еще нет монологов</div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}

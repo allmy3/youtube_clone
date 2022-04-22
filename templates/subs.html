@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои подписки{% endblock title %}
+
+{% block content %}
+{% for sub in subs %}
+    <div style="margin-left: 2%; margin-top: 1%">
+        <a href="{% url 'get_channel' sub.subscribe_user.user_channel.first.slug %}"><img src="{{sub.subscribe_user.user_channel.first.avatar.url}}" class="baground" height="100" width="100" style="border-radius: 10000px"></a>
+    </div>
+{% endfor %}
+{% endblock content %}
